@@ -1,8 +1,11 @@
 #include "Cell.h"
 
-Cell::Cell(unsigned short id)
+Cell::Cell(unsigned short id, int w, int g, int h)
 {
 	this->id = id;
+	this->weightedCost = w;
+	this->costFromStart = g;
+	this->heuristicCost = h;
 
 	obstacle = false;
 }
@@ -19,4 +22,9 @@ bool Cell::isObstacle()
 unsigned short Cell::GetId()
 {
 	return id;
+}
+
+float Cell::GetHeuristicCost()
+{
+	return heuristicCost;
 }

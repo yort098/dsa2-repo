@@ -6,7 +6,7 @@ private:
 	unsigned short id;
 	unsigned short weightedCost;
 	unsigned short costFromStart;
-	unsigned short hueristicCost;
+	float heuristicCost;
 
 	bool obstacle;
 
@@ -14,10 +14,12 @@ private:
 
 public:
 
-	Cell(unsigned short id);
+	Cell(unsigned short id, int w, int g, int h);
 	~Cell();
 
 	bool isObstacle();
 	unsigned short GetId();
+	void SetHeuristicCost(unsigned short cost);
+	float GetHeuristicCost();
 };
 
