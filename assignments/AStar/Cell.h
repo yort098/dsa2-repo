@@ -4,22 +4,39 @@ class Cell
 {
 private:
 	unsigned short id;
+
 	unsigned short weightedCost;
+	unsigned short heuristicCost;
 	unsigned short costFromStart;
-	float heuristicCost;
+	unsigned short weightedDistance;
 
 	bool obstacle;
 
-	//Cell parent;
+	Cell* parent;
 
 public:
+	unsigned short x;
+	unsigned short y;
 
-	Cell(unsigned short id, int w, int g, int h);
+	bool operator==(const Cell& other);
+
+	Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g, unsigned short h);
 	~Cell();
 
 	bool isObstacle();
 	unsigned short GetId();
-	void SetHeuristicCost(unsigned short cost);
-	float GetHeuristicCost();
+
+	unsigned short GetH();
+
+	unsigned short GetW();
+
+	unsigned short GetG();
+	void SetG(unsigned short value);
+
+	unsigned short GetF();
+	void SetF(unsigned short value);
+
+	Cell* GetParent();
+	void SetParent(Cell* other);
 };
 

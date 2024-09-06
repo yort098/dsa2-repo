@@ -9,16 +9,21 @@ private:
 	unsigned short height;
 	std::vector<std::vector<Cell>> grid;
 
-	std::vector<int>* startPoint;
-	std::vector<int>* endPoint;
+	std::vector<unsigned short>* startPoint;
+	std::vector<unsigned short>* endPoint;
+
+	std::vector<Cell> openList;
+	std::vector<Cell> closedList;
+
+	void DrawPath();
 
 public:
 
-	Grid(unsigned short width, unsigned short height, std::vector<int>* startPoint, std::vector<int>* endPoint);
+	Grid(unsigned short width, unsigned short height, std::vector<unsigned short>* startPoint, std::vector<unsigned short>* endPoint);
 	~Grid();
 
 	void Draw();
-	void FindPath(std::vector<unsigned short> start, std::vector<unsigned short> end);
+	void FindPath();
 	//void CalculateHueristicCosts();
 };
 

@@ -3,14 +3,17 @@
 
 #include <iostream>
 #include <vector>
+#include <time.h>
 using namespace std;
 
 int main()
 {
-    int num;
-    vector<int>* startPoint = new vector<int>();
+    srand(NULL);
 
-    vector<int>* endPoint = new vector<int>();
+    int num;
+    vector<unsigned short>* startPoint = new vector<unsigned short>();
+
+    vector<unsigned short>* endPoint = new vector<unsigned short>();
 
     cout << "Please enter a starting x coordinate: ";
     cin >> num;
@@ -35,8 +38,6 @@ int main()
     Grid grid(4, 4, startPoint, endPoint);
    // grid.CalculateHueristicCosts();
     grid.Draw();
-
-    delete startPoint;
-    delete endPoint;
+    grid.FindPath();
 }
 
