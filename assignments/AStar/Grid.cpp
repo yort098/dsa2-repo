@@ -10,12 +10,25 @@ Grid::Grid(unsigned short width, unsigned short height, std::vector<unsigned sho
 	this->endPoint = endPoint;
 
 	int cellCount = 0;
-	for (int i = 0; i < height; ++i)
+	for (int y = 0; y < height; ++y)
 	{
 		grid.push_back(std::vector<Cell>());
-		for (int j = 0; j < width; ++j)
+		for (int x = 0; x < width; ++x)
 		{
-			grid[i].push_back(Cell(cellCount, j, i, (std::rand() % 10) + 1, 0, std::abs(j - (*endPoint)[0]) + std::abs(i - (*endPoint)[1])));
+			grid[y].push_back(Cell(cellCount, x, y, (std::rand() % 10) + 1, 0, std::abs(x - (*endPoint)[0]) + std::abs(y - (*endPoint)[1])));
+			if (x == (*startPoint)[0] && y == (*startPoint)[1])
+			{
+				grid[y][x].cellType = Start;
+			}
+			else if (x == (*endPoint)[0] && y == (*endPoint)[1])
+			{
+				grid[y][x].cellType = End;
+			}
+			else
+			{
+				grid[y][x].cellType = Empty;
+			}
+
 			cellCount++;
 		}
 			
@@ -29,45 +42,40 @@ Grid::~Grid()
 
 void Grid::Draw()
 {
-	//HANDLE console_color;
-	//console_color = GetStdHandle(STD_OUTPUT_HANDLE);
-	//SetConsoleTextAttribute(console_color, 2);
-
+	HANDLE console_color;
+	console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+	
 	//std::cout << "A* Grid with random obstacles:" << std::endl;
 
-	for (unsigned short i = 0; i < height; ++i)
+	for (unsigned short y = 0; y < height; ++y)
 	{
-		for (unsigned short j = 0; j < width; ++j)
+		for (unsigned short x = 0; x < width; ++x)
 		{
 
-			if (grid[j][j].GetId() % width == 0)
+			if (grid[y][x].GetId() % width == 0)
 			{
 				std::cout << std::endl;
 			}
 
-			if (grid[i][j].isObstacle())
+			if (grid[y][x].cellType == Obstacle)
 			{
-				std::cout << "x\t";
+				std::cout << "#\t";
 			}
-			else if (grid[i][j].x == (*startPoint)[1] && grid[i][j].y == (*startPoint)[0])
+			else if (grid[y][x].cellType == Start)
 			{
+				SetConsoleTextAttribute(console_color, 2);
 				std::cout << "S\t";
-				//std::cout << 
-				//	"(h = " << grid[i][j].GetH() <<
-				//	", w = " << grid[i][j].GetW() << 
-				//	", g = " << grid[i][j].GetG() <<
-				//	", f = " << grid[i][j].GetF() <<
-				//	")\t";
 			}
-			else if (grid[i][j].x == (*endPoint)[1] && grid[i][j].y == (*endPoint)[0])
+			else if (grid[y][x].cellType == End)
 			{
+				SetConsoleTextAttribute(console_color, 12);
 				std::cout << "E\t";
 			}
-			else if (unsigned short count = std::count(closedList.begin(), closedList.end(), grid[j][i]) > 0)
+			else if (unsigned short count = std::count(closedList.begin(), closedList.end(), grid[y][x]) > 0)
 			{
 				std::cout << "x\t";
 			}
-			else if (unsigned short count = std::count(openList.begin(), openList.end(), grid[j][i]) > 0)
+			else if (unsigned short count = std::count(openList.begin(), openList.end(), grid[y][x]) > 0)
 			{
 				std::cout << "o\t";
 			}
@@ -75,20 +83,61 @@ void Grid::Draw()
 			{
 				std::cout << ".\t";
 			}
+
+			SetConsoleTextAttribute(console_color, 7);
 		}
 	}
 
 	std::cout << "\n\n";
 }
 
-void Grid::DrawPath()
+void Grid::DrawPath(std::vector<Cell> path)
 {
+	HANDLE console_color;
+	console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	for (unsigned short y = 0; y < height; ++y)
+	{
+		for (unsigned short x = 0; x < width; ++x)
+		{
+
+			if (grid[y][x].GetId() % width == 0)
+			{
+				std::cout << std::endl;
+			}
+
+
+			if (grid[y][x].cellType == Start)
+			{
+				SetConsoleTextAttribute(console_color, 2);
+				std::cout << "S\t";
+			}
+			else if (grid[y][x].cellType == End)
+			{
+				SetConsoleTextAttribute(console_color, 12);
+				std::cout << "E\t";
+			}
+			else if (unsigned short count = std::count(path.begin(), path.end(), grid[y][x]) > 0)
+			{
+				SetConsoleTextAttribute(console_color, 14);
+				std::cout << "x\t";
+			}
+			else
+			{
+				std::cout << " \t";
+			}
+
+			SetConsoleTextAttribute(console_color, 7);
+		}
+	}
+
+	std::cout << "\n\n";
 }
 
 void Grid::FindPath()
 {
 	bool findingPath = true;
-	Cell currentCell = grid[(*startPoint)[0]][(*startPoint)[1]];
+	Cell currentCell = grid[(*startPoint)[1]][(*startPoint)[0]];
 
 	closedList.push_back(currentCell);
 
@@ -114,7 +163,7 @@ void Grid::FindPath()
 				}
 
 				// If the cell is the current one, or an obstacle, then skips over it
-				if ((x == currentCell.x && y == currentCell.y) || grid[y][x].isObstacle())
+				if ((x == currentCell.x && y == currentCell.y) || grid[y][x].cellType == Obstacle)
 				{
 					continue;
 				}
@@ -134,15 +183,27 @@ void Grid::FindPath()
 					}
 
 				// Found the target location!
-				if (x == (*endPoint)[0] && y == (*endPoint)[1])
+				if (grid[y][x].cellType == End)
 				{
 					findingPath = false;
 					std::cout << "End found!" << std::endl;
+					grid[y][x].SetParent(new Cell(currentCell));
+					closedList.push_back(grid[y][x]);
 
-					break;
+					std::vector<Cell> path;
+					currentCell = grid[y][x];
+
+					while (currentCell.cellType != Start)
+					{
+						path.push_back(*(currentCell.GetParent()));
+						currentCell = *(currentCell.GetParent());
+					}
+					
+					DrawPath(path);
+					return;
 				}
 
-				grid[y][x].SetParent(&currentCell);
+				grid[y][x].SetParent(new Cell(currentCell));
 				grid[y][x].SetG(currentCell.GetG() + grid[y][x].GetW());
 				grid[y][x].SetF(grid[y][x].GetG() + grid[y][x].GetH());
 				openList.push_back(grid[y][x]);
@@ -151,16 +212,8 @@ void Grid::FindPath()
 
 		if (openList.size() > 0)
 		{
-			if (findingPath)
-			{
-				Draw();
-			}
-			else
-			{
-				DrawPath();
-			}
+			Draw();
 			
-
 			unsigned short shortestPath = openList[0].GetF();
 			unsigned short shortestPathIndex = 0;
 

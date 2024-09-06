@@ -15,7 +15,7 @@ private:
 	std::vector<Cell> openList;
 	std::vector<Cell> closedList;
 
-	void DrawPath();
+	void DrawPath(std::vector<Cell>);
 
 public:
 

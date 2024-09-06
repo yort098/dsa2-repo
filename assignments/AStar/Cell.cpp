@@ -16,17 +16,11 @@ Cell::Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short
 	
 	weightedDistance = 0;
 	parent = nullptr;
-	obstacle = false;
 }
 
 Cell::~Cell()
 {
 	
-}
-
-bool Cell::isObstacle()
-{
-	return obstacle;
 }
 
 unsigned short Cell::GetId()
