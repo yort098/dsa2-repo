@@ -27,12 +27,13 @@ public:
 
 	bool operator==(const Cell& other);
 
-	Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g, unsigned short h);
+	Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g);
 	~Cell();
 
 	unsigned short GetId();
 
 	unsigned short GetH();
+	void SetH(unsigned short value);
 
 	unsigned short GetW();
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <windows.h>
 
-Grid::Grid(unsigned short width, unsigned short height, std::vector<unsigned short>* startPoint, std::vector<unsigned short>* endPoint)
+Grid::Grid(unsigned short width, unsigned short height)
 {
 	this->width = width;
 	this->height = height;
@@ -15,19 +15,8 @@ Grid::Grid(unsigned short width, unsigned short height, std::vector<unsigned sho
 		grid.push_back(std::vector<Cell>());
 		for (int x = 0; x < width; ++x)
 		{
-			grid[y].push_back(Cell(cellCount, x, y, (std::rand() % 10) + 1, 0, std::abs(x - (*endPoint)[0]) + std::abs(y - (*endPoint)[1])));
-			if (x == (*startPoint)[0] && y == (*startPoint)[1])
-			{
-				grid[y][x].cellType = Start;
-			}
-			else if (x == (*endPoint)[0] && y == (*endPoint)[1])
-			{
-				grid[y][x].cellType = End;
-			}
-			else
-			{
-				grid[y][x].cellType = Empty;
-			}
+			grid[y].push_back(Cell(cellCount, x, y, (std::rand() % 10) + 1, 0));
+			grid[y][x].cellType = Empty;
 
 			cellCount++;
 		}
@@ -40,12 +29,33 @@ Grid::~Grid()
 
 }
 
+void Grid::SetStartPoint(std::vector<unsigned short>* startPoint)
+{
+	this->startPoint = startPoint;
+	grid[(*startPoint)[1]][(*startPoint)[0]].cellType = Start;
+}
+
+void Grid::SetEndPoint(std::vector<unsigned short>* endPoint)
+{
+	this->endPoint = endPoint;
+	grid[(*endPoint)[1]][(*endPoint)[0]].cellType = End;
+
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			grid[y][x].SetH(std::abs(x - (*endPoint)[0]) + std::abs(y - (*endPoint)[1]));
+		}
+
+	}
+}
+
 void Grid::Draw()
 {
 	HANDLE console_color;
 	console_color = GetStdHandle(STD_OUTPUT_HANDLE);
 	
-	//std::cout << "A* Grid with random obstacles:" << std::endl;
+	std::cout << "\nKey: 'S' = start 'E' = end 'x' = closed list 'o' = open list '.' = unchecked cell '#' = wall" << std::endl;
 
 	for (unsigned short y = 0; y < height; ++y)
 	{

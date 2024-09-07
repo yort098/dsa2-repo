@@ -5,15 +5,15 @@ bool Cell::operator==(const Cell& other)
 	return (x == other.x && y == other.y);
 }
 
-Cell::Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g, unsigned short h)
+Cell::Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g)
 {
 	this->x = x;
 	this->y = y;
 	this->id = id;
 	this->weightedCost = w;
 	this->costFromStart = g;
-	this->heuristicCost = h;
 	
+	heuristicCost = 0;
 	weightedDistance = 0;
 	parent = nullptr;
 }
@@ -31,6 +31,11 @@ unsigned short Cell::GetId()
 unsigned short Cell::GetH()
 {
 	return heuristicCost;
+}
+
+void Cell::SetH(unsigned short value)
+{
+	heuristicCost = value;
 }
 
 unsigned short Cell::GetW()
