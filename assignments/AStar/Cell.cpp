@@ -15,12 +15,18 @@ Cell::Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short
 	
 	heuristicCost = 0;
 	weightedDistance = 0;
+	cellType = Empty;
 	parent = nullptr;
 }
 
 Cell::~Cell()
 {
+	if (parent)
+	{
+		delete parent;
+	}
 	
+	parent = nullptr;
 }
 
 unsigned short Cell::GetId()

@@ -24,6 +24,8 @@ public:
 	
 	void SetStartPoint(std::vector<unsigned short>* startPoint);
 	void SetEndPoint(std::vector<unsigned short>* endPoint);
+	void GenerateObstacles(unsigned short count);
+
 	void Draw();
 	void FindPath();
 	//void CalculateHueristicCosts();

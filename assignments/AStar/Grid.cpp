@@ -4,6 +4,8 @@
 
 Grid::Grid(unsigned short width, unsigned short height)
 {
+	srand(NULL);
+
 	this->width = width;
 	this->height = height;
 	this->startPoint = startPoint;
@@ -16,17 +18,17 @@ Grid::Grid(unsigned short width, unsigned short height)
 		for (int x = 0; x < width; ++x)
 		{
 			grid[y].push_back(Cell(cellCount, x, y, (std::rand() % 10) + 1, 0));
-			grid[y][x].cellType = Empty;
-
 			cellCount++;
 		}
 			
 	}
+
 }
 
 Grid::~Grid()
 {
-
+	delete startPoint;
+	delete endPoint;
 }
 
 void Grid::SetStartPoint(std::vector<unsigned short>* startPoint)
@@ -47,6 +49,23 @@ void Grid::SetEndPoint(std::vector<unsigned short>* endPoint)
 			grid[y][x].SetH(std::abs(x - (*endPoint)[0]) + std::abs(y - (*endPoint)[1]));
 		}
 
+	}
+}
+
+void Grid::GenerateObstacles(unsigned short count)
+{
+	//srand(NULL);
+	for (unsigned int i = 0; i < count; ++i)
+	{
+		Cell* randomCell = &(grid[std::rand() % height][std::rand() % width]);
+
+		// Making sure the wall goes in an available spot
+		while ((*randomCell).cellType != Empty)
+		{
+			randomCell = &(grid[std::rand() % height][std::rand() % width]);
+		}
+
+		(*randomCell).cellType = Obstacle;
 	}
 }
 

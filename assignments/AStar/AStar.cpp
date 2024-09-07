@@ -24,6 +24,7 @@ int main()
 
     cout << "This is your grid: " << endl;
     grid.Draw();
+    system("pause");
 
     int num;
     vector<unsigned short>* startPoint = new vector<unsigned short>();
@@ -54,9 +55,24 @@ int main()
     grid.SetStartPoint(startPoint);
     grid.SetEndPoint(endPoint);
     grid.Draw();
+    system("pause");
 
+    unsigned short numObstacles = 0;
+    cout << "Please enter a number of walls to add (between 0-" << (width*height) - 2 << "): ";
+    cin >> numObstacles;
+
+    cout << "This is your grid with random walls added: " << endl;
+    grid.GenerateObstacles(numObstacles);
+    grid.Draw();
+    system("pause");
     
     cout << "Finding path..." << endl;
+    system("pause");
     grid.FindPath();
+
+    if (_CrtDumpMemoryLeaks())
+    {
+        cout << "Mem leaks!" << endl;
+    }
 }
 
