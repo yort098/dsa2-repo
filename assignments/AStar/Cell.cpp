@@ -20,12 +20,8 @@ Cell::Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short
 }
 
 Cell::~Cell()
-{
-	if (parent)
-	{
-		delete parent;
-	}
-	
+{	
+	//delete parent;
 	parent = nullptr;
 }
 

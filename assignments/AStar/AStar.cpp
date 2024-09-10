@@ -4,11 +4,12 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <memory>
 using namespace std;
 
-int main()
+void wrapper()
 {
-    srand(NULL);
+    srand(time(NULL));
 
     cout << "Welcome to the A* Console Simulator!\n" << endl;
 
@@ -26,29 +27,45 @@ int main()
     grid.Draw();
     system("pause");
 
-    int num;
-    vector<unsigned short>* startPoint = new vector<unsigned short>();
+    unsigned int num;
+    shared_ptr<vector<int>> startPoint = make_shared<vector<int>>();
 
-    vector<unsigned short>* endPoint = new vector<unsigned short>();
+    shared_ptr<vector<int>> endPoint = make_shared<vector<int>>();
 
-    cout << "Please enter a starting x coordinate (between 0-" << width-1 << "): ";
-    cin >> num;
+    do
+    {
+        cout << "Please enter a starting x coordinate (between 0-" << width - 1 << "): ";
+        cin >> num;
+
+    } while (num < 0 || num > width - 1);
+
     startPoint->push_back(num);
 
-    cout << "Please enter a starting y coordinate (between 0-" << height - 1 << "): ";
-    cin >> num;
+    do
+    {
+        cout << "Please enter a starting y coordinate (between 0-" << height - 1 << "): ";
+        cin >> num;
+
+    } while (num < 0 || num > height - 1);
 
     startPoint->push_back(num);
 
     cout << endl;
 
-    cout << "Please enter a ending x coordinate (between 0-" << width - 1 << "): ";
-    cin >> num;
+    do
+    {
+        cout << "Please enter a ending x coordinate (between 0-" << width - 1 << "): ";
+        cin >> num;
+    } while (num < 0 || num > width - 1);
+  
     endPoint->push_back(num);
 
-    cout << "Please enter a ending y coordinate (between 0-" << height - 1 << "): ";
-    cin >> num;
-
+    do
+    {
+        cout << "Please enter a ending y coordinate (between 0-" << height - 1 << "): ";
+        cin >> num;
+    } while (num < 0 || num > height - 1);
+    
     endPoint->push_back(num);
 
     cout << "This is your grid with start and end points: " << endl;
@@ -58,17 +75,25 @@ int main()
     system("pause");
 
     unsigned short numObstacles = 0;
-    cout << "Please enter a number of walls to add (between 0-" << (width*height) - 2 << "): ";
-    cin >> numObstacles;
+    do
+    {
+        cout << "Please enter a number of walls to add (between 0-" << (width * height) - 2 << "): ";
+        cin >> numObstacles;
+    } while (numObstacles < 0 || numObstacles >(width * height) - 2);
 
     cout << "This is your grid with random walls added: " << endl;
     grid.GenerateObstacles(numObstacles);
     grid.Draw();
     system("pause");
-    
+
     cout << "Finding path..." << endl;
     system("pause");
     grid.FindPath();
+}
+
+int main()
+{
+    wrapper();
 
     if (_CrtDumpMemoryLeaks())
     {

@@ -4,8 +4,6 @@
 
 Grid::Grid(unsigned short width, unsigned short height)
 {
-	srand(NULL);
-
 	this->width = width;
 	this->height = height;
 	this->startPoint = startPoint;
@@ -27,20 +25,18 @@ Grid::Grid(unsigned short width, unsigned short height)
 
 Grid::~Grid()
 {
-	delete startPoint;
-	delete endPoint;
 }
 
-void Grid::SetStartPoint(std::vector<unsigned short>* startPoint)
+void Grid::SetStartPoint(std::shared_ptr<std::vector<int>> startPoint)
 {
 	this->startPoint = startPoint;
 	grid[(*startPoint)[1]][(*startPoint)[0]].cellType = Start;
 }
 
-void Grid::SetEndPoint(std::vector<unsigned short>* endPoint)
+void Grid::SetEndPoint(std::shared_ptr<std::vector<int>> endPoint)
 {
 	this->endPoint = endPoint;
-	grid[(*endPoint)[1]][(*endPoint)[0]].cellType = End;
+	grid[(*endPoint)[1]][(*endPoint)[1]].cellType = End;
 
 	for (int y = 0; y < height; ++y)
 	{

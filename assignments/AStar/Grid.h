@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include "Cell.h"
 
 class Grid
@@ -9,8 +10,8 @@ private:
 	unsigned short height;
 	std::vector<std::vector<Cell>> grid;
 
-	std::vector<unsigned short>* startPoint;
-	std::vector<unsigned short>* endPoint;
+	std::shared_ptr<std::vector<int>> startPoint;
+	std::shared_ptr<std::vector<int>> endPoint;
 
 	std::vector<Cell> openList;
 	std::vector<Cell> closedList;
@@ -22,8 +23,8 @@ public:
 	Grid(unsigned short width, unsigned short height);
 	~Grid();
 	
-	void SetStartPoint(std::vector<unsigned short>* startPoint);
-	void SetEndPoint(std::vector<unsigned short>* endPoint);
+	void SetStartPoint(std::shared_ptr<std::vector<int>> startPoint);
+	void SetEndPoint(std::shared_ptr<std::vector<int>> endPoint);
 	void GenerateObstacles(unsigned short count);
 
 	void Draw();
