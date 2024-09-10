@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <windows.h>
 #include "Cell.h"
 
 class Grid
@@ -16,12 +17,13 @@ private:
 	std::vector<Cell> openList;
 	std::vector<Cell> closedList;
 
+	HANDLE console_color;
+
 	void DrawPath(std::vector<Cell>);
 
 public:
 
 	Grid(unsigned short width, unsigned short height);
-	~Grid();
 	
 	void SetStartPoint(std::shared_ptr<std::vector<int>> startPoint);
 	void SetEndPoint(std::shared_ptr<std::vector<int>> endPoint);
@@ -29,6 +31,5 @@ public:
 
 	void Draw();
 	void FindPath();
-	//void CalculateHueristicCosts();
 };
 

@@ -1,10 +1,14 @@
 #pragma once
+#include <memory>
 
+/// <summary>
+/// Represents the type of cell that is on the grid
+/// </summary>
 enum CellType
 {
 	Start,
 	End,
-	Obstacle,
+	Wall,
 	Empty
 };
 
@@ -16,7 +20,7 @@ private:
 	unsigned short costFromStart;
 	unsigned short weightedDistance;
 
-	Cell* parent;
+	std::shared_ptr<Cell> parent;
 	
 
 public:
@@ -27,10 +31,7 @@ public:
 
 	bool operator==(const Cell& other);
 
-	Cell(unsigned short id, unsigned short x, unsigned short y, unsigned short w, unsigned short g);
-	~Cell();
-
-	unsigned short GetId();
+	Cell(unsigned short id, unsigned short x, unsigned short y);
 
 	unsigned short GetH();
 	void SetH(unsigned short value);
@@ -43,7 +44,7 @@ public:
 	unsigned short GetF();
 	void SetF(unsigned short value);
 
-	Cell* GetParent();
-	void SetParent(Cell* other);
+	std::shared_ptr<Cell> GetParent();
+	void SetParent(Cell other);
 };
 
